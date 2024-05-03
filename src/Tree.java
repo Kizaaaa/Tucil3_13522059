@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 
 public class Tree {
-    public int cost;
+    public int g,h;
     public String kata;
     public ArrayList<String> path;
 
-    public Tree(int cost, String kata, ArrayList<String> path){
-        this.cost = cost;
+    public Tree(int g,int h, String kata, ArrayList<String> path){
+        this.g = g;
+        this.h = h;
         this.kata = kata;
         this.path = path;
     }

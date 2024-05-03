@@ -7,6 +7,8 @@ public class Main {
     public static long startTime, endTime, dikunjungi = 0;
     public static int len;
     public static ArrayList<String> path;
+    public static ArrayList<Tree> queue = new ArrayList<>();;
+    
 
     // Membaca file txt yang berisi kata inggris yang valid
     public static void readDictionary(String filePath) {
@@ -25,11 +27,8 @@ public class Main {
         // Memulai perhitungan waktu
         startTime = System.currentTimeMillis();
 
-        // Deklarasi queue
-        ArrayList<Tree> queue = new ArrayList<>();
-
         // Deklarasi node awal
-        Tree t = new Tree(0, start, new ArrayList<String>());
+        Tree t = new Tree(0,0, start, new ArrayList<String>());
 
         // Memasukkan node awal pada queue
         queue.add(t);
@@ -53,7 +52,7 @@ public class Main {
                         if(!visited.contains(tempString) && dictionary.contains(tempString)){
                             ArrayList<String> tempPath = new ArrayList<>(queue.get(0).path);
                             tempPath.add(tempString);
-                            Tree tempTree = new Tree(queue.get(0).cost+1, tempString, tempPath);
+                            Tree tempTree = new Tree(queue.get(0).g+1,0, tempString, tempPath);
                             queue.add(tempTree);
                             visited.add(tempString);
                         }
@@ -72,9 +71,76 @@ public class Main {
         path = queue.get(0).path;
     }
 
+    public static int calculateDistanceToFinish(String s){
+        int ret = 0;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i) != end.charAt(i)){
+                ret++;
+            }
+        }
+        return ret;
+    }
+
+    public static void InsertGBFS(Tree t){
+        if(queue.isEmpty() || queue.get(queue.size()-1).h < t.h){
+            queue.add(t);
+        }
+        for(int i=0;i<queue.size();i++){
+            if(queue.get(i).kata == t.kata){
+                break;
+            }
+            if(queue.get(i).h > t.h){
+                queue.add(i, t);
+                for(int j=i+1;j<queue.size();j++){
+                    if(queue.get(j).kata == t.kata){
+                        queue.remove(j);
+                    }
+                }
+            }
+        }
+    }
+
     public static void GBFS(){
         // Memulai perhitungan waktu
         startTime = System.currentTimeMillis();
+
+        // Deklarasi node awal
+        Tree t = new Tree(0, calculateDistanceToFinish(start), start, new ArrayList<String>());
+
+        // Memasukkan node awal pada queue
+        queue.add(t);
+
+        // Memulai proses UCS
+        while(true){
+            // Menambah node yang dikunjungi
+            dikunjungi++;
+            System.out.println(queue.get(0).kata);
+
+            // Kata tujuan ditemukan! keluar dari while loop
+            if(queue.get(0).kata.equals(end)){
+                break;
+            }
+
+            // Menghasilkan kata yang berbeda 1 huruf
+            for(int i=0;i<len;i++){
+                for(char c : "abcdefghijklmnopqrstuvwxyz".toCharArray()){
+                    if(queue.get(0).kata.charAt(i) != c){
+                        String tempString = queue.get(0).kata.substring(0, i) + c + queue.get(0).kata.substring(i+1);
+                        System.out.println(tempString);
+                        // Jika kata valid
+                        if(dictionary.contains(tempString)){
+                            ArrayList<String> tempPath = new ArrayList<>(queue.get(0).path);
+                            tempPath.add(tempString);
+                            Tree tempTree = new Tree(0,calculateDistanceToFinish(tempString), tempString, tempPath);
+                            InsertGBFS(tempTree);
+                        }
+                    }
+                }
+            }
+            System.out.println("sini");
+            // Menghapus kata yang sudah dicek dari queue
+            queue.remove(0);
+        }
 
         // Menghentikan perhitungan waktu
         endTime = System.currentTimeMillis();
