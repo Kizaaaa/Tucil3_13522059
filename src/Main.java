@@ -7,7 +7,7 @@ public class Main {
     public static long startTime, endTime, dikunjungi = 0;
     public static int len;
     public static ArrayList<String> path;
-    public static ArrayList<Tree> queue = new ArrayList<>();;
+    public static ArrayList<Node> queue = new ArrayList<>();;
     
 
     // Membaca file txt yang berisi kata inggris yang valid
@@ -28,7 +28,7 @@ public class Main {
         startTime = System.currentTimeMillis();
 
         // Deklarasi node awal
-        Tree t = new Tree(0,0, start, new ArrayList<String>());
+        Node t = new Node(0,0, start, new ArrayList<String>());
 
         // Memasukkan node awal pada queue
         queue.add(t);
@@ -53,7 +53,7 @@ public class Main {
                         if(!visited.contains(tempString) && dictionary.contains(tempString)){
                             ArrayList<String> tempPath = new ArrayList<>(queue.get(0).path);
                             tempPath.add(tempString);
-                            Tree tempTree = new Tree(queue.get(0).g+1,0, tempString, tempPath);
+                            Node tempTree = new Node(queue.get(0).g+1,0, tempString, tempPath);
                             queue.add(tempTree);
                             visited.add(tempString);
                         }
@@ -82,7 +82,7 @@ public class Main {
         return ret;
     }
 
-    public static void InsertGBFS(Tree t){
+    public static void InsertGBFS(Node t){
         if(queue.isEmpty() || queue.get(queue.size()-1).h <= t.h){
             queue.add(t);
         } else {
@@ -109,7 +109,7 @@ public class Main {
         startTime = System.currentTimeMillis();
 
         // Deklarasi node awal
-        Tree t = new Tree(0, calculateDistanceToFinish(start), start, new ArrayList<String>());
+        Node t = new Node(0, calculateDistanceToFinish(start), start, new ArrayList<String>());
 
         // Memasukkan node awal pada queue
         queue.add(t);
@@ -119,7 +119,7 @@ public class Main {
         while(true){
             // Menambah node yang dikunjungi
             dikunjungi++;
-            Tree treeSekarang = queue.get(0);
+            Node treeSekarang = queue.get(0);
 
             // Kata tujuan ditemukan! keluar dari while loop
             if(treeSekarang.kata.equals(end)){
@@ -135,7 +135,7 @@ public class Main {
                         if(!visited.contains(tempString) && dictionary.contains(tempString)){
                             ArrayList<String> tempPath = new ArrayList<>(treeSekarang.path);
                             tempPath.add(tempString);
-                            Tree tempTree = new Tree(0,calculateDistanceToFinish(tempString), tempString, tempPath);
+                            Node tempTree = new Node(0,calculateDistanceToFinish(tempString), tempString, tempPath);
                             InsertGBFS(tempTree);
                             visited.add(tempString);
                         }
@@ -154,7 +154,7 @@ public class Main {
         path = queue.get(0).path;
     }
 
-    public static void InsertAS(Tree t){
+    public static void InsertAS(Node t){
         if(queue.isEmpty() || queue.get(queue.size()-1).h + queue.get(queue.size()-1).g <= t.h + t.g){
             queue.add(t);
         } else {
@@ -172,7 +172,7 @@ public class Main {
         startTime = System.currentTimeMillis();
 
         // Deklarasi node awal
-        Tree t = new Tree(0, calculateDistanceToFinish(start), start, new ArrayList<String>());
+        Node t = new Node(0, calculateDistanceToFinish(start), start, new ArrayList<String>());
 
         // Memasukkan node awal pada queue
         queue.add(t);
@@ -182,7 +182,7 @@ public class Main {
         while(true){
             // Menambah node yang dikunjungi
             dikunjungi++;
-            Tree treeSekarang = queue.get(0);
+            Node treeSekarang = queue.get(0);
 
             // Kata tujuan ditemukan! keluar dari while loop
             if(treeSekarang.kata.equals(end)){
@@ -198,7 +198,7 @@ public class Main {
                         if(!visited.contains(tempString) && dictionary.contains(tempString)){
                             ArrayList<String> tempPath = new ArrayList<>(treeSekarang.path);
                             tempPath.add(tempString);
-                            Tree tempTree = new Tree(treeSekarang.g+1,calculateDistanceToFinish(tempString), tempString, tempPath);
+                            Node tempTree = new Node(treeSekarang.g+1,calculateDistanceToFinish(tempString), tempString, tempPath);
                             InsertAS(tempTree);
                             visited.add(tempString);
                         }
@@ -219,7 +219,7 @@ public class Main {
     
     public static void main(String[] args) {
         // Deklarasi set untuk menyimpan kata inggris yang valid
-        readDictionary("dict.txt");
+        readDictionary("../src/dict.txt");
 
         // Deklarasi set untuk menyimpan kata yang sudah dicek
         visited = new HashSet<String>();
