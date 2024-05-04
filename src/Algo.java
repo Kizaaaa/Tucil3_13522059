@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Algo {
     public static Set<String> dictionary, visited = new HashSet<>();
     public static String start, end;
     public static long startTime, endTime, dikunjungi;
@@ -231,76 +231,5 @@ public class Main {
 
         // Mencatat jalur yang telah ditemukan
         path = queue.get(0).path;
-    }
-    
-    public static void main(String[] args) {
-
-        // Deklarasi Scanner untuk input
-        Scanner sc = new Scanner(System.in);
-        
-        // Input dan validasi kata awal
-        System.out.print("Masukkan Kata Awal : ");
-        start = sc.nextLine().toLowerCase();
-        while(!dictionary.contains(start)){
-            System.out.print("\nKata tidak valid!\n\nMasukkan Kata Awal : ");
-            start = sc.nextLine().toLowerCase();
-        }
-
-        // Input dan validasi kata akhir
-        System.out.print("Masukkan Kata Akhir : ");
-        end = sc.nextLine().toLowerCase();
-        while(!dictionary.contains(end) || start.length() != end.length()){
-            if(start.length() != end.length()){
-                System.out.println("\nPanjang kata berbeda!");
-            } else {
-                System.out.println("\nKata tidak valid!");
-            }
-            System.out.print("\nMasukkan Kata Akhir : ");
-            end = sc.nextLine().toLowerCase();
-        }
-
-        // Menyimpan panjang kata
-        len = end.length();
-
-        // Pemilihan algoritma
-        System.out.print("Algoritma :\n1. Uniform Cost Search (UCS)\n2. Greedy Best-First Search\n3. A* Search\nAlgoritma Yang digunakan(1/2/3) : ");
-        String algo = sc.nextLine();
-        while(!(algo != "1" || algo != "2" || algo != "3")){
-            System.out.print("\ninput tidak valid!\nAlgoritma :\n1. Uniform Cost Search (UCS)\n2. Greedy Best-First Search\n3. A* Search\nAlgoritma Yang digunakan(1/2/3) : ");
-            algo = sc.nextLine();
-        }
-
-        // Close Scanner
-        sc.close();
-
-        
-        try {
-            // Pemanggilan fungsi algoritma sesuai input
-            switch (algo) {
-                case "1": // Uniform Cost Search (UCS)
-                    UCS();
-                    break;
-                case "2": // Greedy Best-First Search
-                    GBFS();
-                    break;
-                case "3": // A* Search
-                    AS();
-                    break;
-            }
-
-            // Print Path
-            System.out.println("\nPath :");
-            System.out.println(start.toUpperCase());
-            if(start != end){
-                for(String s : path){
-                    System.out.println(s.toUpperCase());
-                }
-            }
-
-            // Print node yang dikunjungi dan waktu yang diperlukan
-            System.out.println("\nPanjang path : " + path.size() + " Langkah\nNode yang dikunjungi : " + dikunjungi + "\nWaktu : " + (endTime-startTime) + " ms");
-        } catch (IndexOutOfBoundsException exception) {
-            System.out.println("Tidak ditemukan path dari " + start + " menuju " + end + ".");
-        }        
     }
 }

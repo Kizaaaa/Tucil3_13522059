@@ -89,52 +89,52 @@ public class GUI extends Frame implements ActionListener {
         result2.setText("");
         result3.setText("");
         if(e.getSource() == submitButton){
-            Main.start = word1Field.getText();
-            Main.end = word2Field.getText();
+            Algo.start = word1Field.getText();
+            Algo.end = word2Field.getText();
             String selectedChoice = choice.getSelectedItem();
             
-            if(Main.start.length() != Main.end.length()){
+            if(Algo.start.length() != Algo.end.length()){
                 result2.setText("2 Kata panjangnya berbeda");
-            } else if(!Main.dictionary.contains(Main.start)){
-                result2.setText(Main.start +" bukan kata yang valid");
-            } else if(!Main.dictionary.contains(Main.end)){
-                result2.setText(Main.end +" bukan kata yang valid");
+            } else if(!Algo.dictionary.contains(Algo.start)){
+                result2.setText(Algo.start +" bukan kata yang valid");
+            } else if(!Algo.dictionary.contains(Algo.end)){
+                result2.setText(Algo.end +" bukan kata yang valid");
             } else {
                 try {
                     if(selectedChoice.equals("Uniform Cost Search (UCS)")){
-                        Main.UCS();
+                        Algo.UCS();
                     } else if(selectedChoice.equals("Greedy Best-First Search")){
-                        Main.GBFS();
+                        Algo.GBFS();
                     } else {
-                        Main.AS();
+                        Algo.AS();
                     }
                     
                     result1.setPreferredSize(new Dimension(2000,20));
                     result2.setPreferredSize(new Dimension(2000,20));
                     result3.setPreferredSize(new Dimension(2000,20));
 
-                    result1.setText("Panjang path : " + Main.path.size() + " langkah");
-                    result2.setText("Node yang dikunjungi : " + Main.dikunjungi);
-                    result3.setText("Waktu : " + (Main.endTime - Main.startTime) + " ms");
+                    result1.setText("Panjang path : " + Algo.path.size() + " langkah");
+                    result2.setText("Node yang dikunjungi : " + Algo.dikunjungi);
+                    result3.setText("Waktu : " + (Algo.endTime - Algo.startTime) + " ms");
 
                     result1.setPreferredSize(new Dimension(2000,20));
                     result2.setPreferredSize(new Dimension(2000,20));
                     result3.setPreferredSize(new Dimension(2000,20));
 
-                    resultList.setText(Main.start + "\n");  // Clear previous results
-                    for (String item : Main.path) {
+                    resultList.setText(Algo.start + "\n");  // Clear previous results
+                    for (String item : Algo.path) {
                         resultList.append(item + "\n");
                     }
                 } catch (IndexOutOfBoundsException err) {
-                    result2.setText("Tidak ditemukan path dari " + Main.start + " menuju " + Main.end + ".");
+                    result2.setText("Tidak ditemukan path dari " + Algo.start + " menuju " + Algo.end + ".");
                 }
             }
         }
     }
 
-    public static void main(String[] args) {
+    public static void Algo(String[] args) {
         // Deklarasi set untuk menyimpan kata inggris yang valid
-        Main.readDictionary("../src/dict.txt");
+        Algo.readDictionary("../src/dict.txt");
         new GUI();
     }
 }
