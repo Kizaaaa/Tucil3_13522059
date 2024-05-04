@@ -88,7 +88,7 @@ public class Algo {
         return ret;
     }
 
-    public static void InsertGBFS(Node t){
+    public static void insertGBFS(Node t){
         if(queue.isEmpty() || queue.get(queue.size()-1).h <= t.h){
             queue.add(t);
         } else {
@@ -101,7 +101,7 @@ public class Algo {
         }
     }
 
-    public static void Delete(String s){
+    public static void delete(String s){
         for(int i=0;i<queue.size();i++){
             if(queue.get(i).kata.equals(s)){
                 queue.remove(i);
@@ -126,7 +126,7 @@ public class Algo {
         queue.add(t);
         visited.add(start);
 
-        // Memulai proses UCS
+        // Memulai proses GBFS
         while(true){
             // Menambah node yang dikunjungi
             dikunjungi++;
@@ -147,7 +147,7 @@ public class Algo {
                             ArrayList<String> tempPath = new ArrayList<>(treeSekarang.path);
                             tempPath.add(tempString);
                             Node tempTree = new Node(0,calculateDistanceToFinish(tempString), tempString, tempPath);
-                            InsertGBFS(tempTree);
+                            insertGBFS(tempTree);
                             visited.add(tempString);
                         }
                     }
@@ -155,7 +155,7 @@ public class Algo {
             }
 
             // Menghapus kata yang sudah dicek dari queue
-            Delete(treeSekarang.kata);
+            delete(treeSekarang.kata);
         }
 
         // Menghentikan perhitungan waktu
@@ -165,7 +165,7 @@ public class Algo {
         path = queue.get(0).path;
     }
 
-    public static void InsertAS(Node t){
+    public static void insertAS(Node t){
         if(queue.isEmpty() || queue.get(queue.size()-1).h + queue.get(queue.size()-1).g <= t.h + t.g){
             queue.add(t);
         } else {
@@ -194,7 +194,7 @@ public class Algo {
         queue.add(t);
         visited.add(start);
 
-        // Memulai proses UCS
+        // Memulai proses AS
         while(true){
             // Menambah node yang dikunjungi
             dikunjungi++;
@@ -215,7 +215,7 @@ public class Algo {
                             ArrayList<String> tempPath = new ArrayList<>(treeSekarang.path);
                             tempPath.add(tempString);
                             Node tempTree = new Node(treeSekarang.g+1,calculateDistanceToFinish(tempString), tempString, tempPath);
-                            InsertAS(tempTree);
+                            insertAS(tempTree);
                             visited.add(tempString);
                         }
                     }
@@ -223,7 +223,7 @@ public class Algo {
             }
 
             // Menghapus kata yang sudah dicek dari queue
-            Delete(treeSekarang.kata);
+            delete(treeSekarang.kata);
         }
 
         // Menghentikan perhitungan waktu

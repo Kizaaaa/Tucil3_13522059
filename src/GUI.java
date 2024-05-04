@@ -2,46 +2,46 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GUI extends Frame implements ActionListener {
-    TextField word1Field, word2Field;
-    Button submitButton;
+    TextField startField, endField;
+    Button findButton;
     Choice choice;
-    TextArea resultList;
-    Label result1, result2, result3;
+    TextArea path;
+    Label pathSize, nodeSize, time;
 
     public GUI() {
-        // Set up the frame using GridBagLayout for precise control over components
+        // Set Layout
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints(), constraints2 = new GridBagConstraints();
 
-        // Constraints common to all components
+        // Constraints agar flow kebawah dan center
         constraints.fill = GridBagConstraints.NONE;
-        constraints.gridx = 0;  // Single column
-        constraints.gridy = GridBagConstraints.RELATIVE;  // Each component on a new row
-        constraints.weightx = 1.0;  // Expand all components fully horizontally
-        constraints.insets = new Insets(5, 10, 5, 10);  // Margin around components
+        constraints.gridx = 0;  // 1 kolom
+        constraints.gridy = GridBagConstraints.RELATIVE;  // flow kebawah
+        constraints.weightx = 1.0;  // width : 100%
+        constraints.insets = new Insets(5, 10, 5, 10);  // Margin
 
-        // Constraints common to all components
+        // Constraints untuk output
         constraints2.fill = GridBagConstraints.HORIZONTAL;
-        constraints2.gridx = 0;  // Single column
-        constraints2.gridy = GridBagConstraints.RELATIVE;  // Each component on a new row
-        constraints2.weightx = 1.0;  // Expand all components fully horizontally
-        constraints2.insets = new Insets(5, 10, 5, 10);  // Margin around components
+        constraints2.gridx = 0;  // 1 kolom
+        constraints2.gridy = GridBagConstraints.RELATIVE;  // flow kebawah
+        constraints2.weightx = 1.0;  // width : 100%
+        constraints2.insets = new Insets(5, 10, 5, 10);  // Margin
 
-        // First input with label
+        // Input start
         Panel firstInputPanel = new Panel();
         firstInputPanel.add(new Label("Enter word 1:"));
-        word1Field = new TextField(20);
-        firstInputPanel.add(word1Field);
+        startField = new TextField(20);
+        firstInputPanel.add(startField);
         add(firstInputPanel, constraints);
 
-        // Second input with label
+        // Input end
         Panel secondInputPanel = new Panel();
         secondInputPanel.add(new Label("Enter word 2:"));
-        word2Field = new TextField(20);
-        secondInputPanel.add(word2Field);
+        endField = new TextField(20);
+        secondInputPanel.add(endField);
         add(secondInputPanel, constraints);
 
-        // Choice dropdown
+        // Pilihan algoritma
         choice = new Choice();
         choice.add("Uniform Cost Search (UCS)");
         choice.add("Greedy Best-First Search");
@@ -49,34 +49,32 @@ public class GUI extends Frame implements ActionListener {
         choice.setPreferredSize(new Dimension(2000, 20));  // Set the preferred size
         add(choice, constraints);
 
-        // Submit button
-        submitButton = new Button("Cari");
-        submitButton.addActionListener(this);
-        add(submitButton, constraints);
+        // Button cari
+        findButton = new Button("Cari");
+        findButton.addActionListener(this);
+        add(findButton, constraints);
 
-        // Labels for the results
-        result1 = new Label("");
-        add(result1, constraints2);
+        // Label output
+        pathSize = new Label("");
+        add(pathSize, constraints2);
+        nodeSize = new Label("");
+        add(nodeSize, constraints2);
+        time = new Label("");
+        add(time, constraints2);
 
-        result2 = new Label("");
-        add(result2, constraints2);
-
-        result3 = new Label("");
-        add(result3, constraints2);
-
-        // Text area for multiple results
-        resultList = new TextArea(5, 0);
-        resultList.setPreferredSize(new Dimension(100,20));
+        // Label path
+        path = new TextArea(5, 0);
+        path.setPreferredSize(new Dimension(100,20));
         constraints.weighty = 1;  // Give extra vertical space to the text area
         constraints.fill = GridBagConstraints.BOTH;
-        add(resultList, constraints);
+        add(path, constraints);
 
-        setTitle("Simple GUI");
+        setTitle("World Ladder Solver");
         pack();
         setVisible(true);
         setExtendedState(Frame.MAXIMIZED_BOTH);
 
-        // Handle window closing
+        // Handle tutup window
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 dispose();
@@ -84,23 +82,27 @@ public class GUI extends Frame implements ActionListener {
         });
     }
 
+    // Fungsi jika button ditekan
     public void actionPerformed(ActionEvent e) {
-        result1.setText("");
-        result2.setText("");
-        result3.setText("");
-        if(e.getSource() == submitButton){
-            Algo.start = word1Field.getText();
-            Algo.end = word2Field.getText();
+        // Mereset label output
+        pathSize.setText("");
+        nodeSize.setText("");
+        time.setText("");
+        if(e.getSource() == findButton){
+            Algo.start = startField.getText();
+            Algo.end = endField.getText();
             String selectedChoice = choice.getSelectedItem();
             
+            // validasi input
             if(Algo.start.length() != Algo.end.length()){
-                result2.setText("2 Kata panjangnya berbeda");
+                nodeSize.setText("2 Kata panjangnya berbeda");
             } else if(!Algo.dictionary.contains(Algo.start)){
-                result2.setText(Algo.start +" bukan kata yang valid");
+                nodeSize.setText(Algo.start +" bukan kata yang valid");
             } else if(!Algo.dictionary.contains(Algo.end)){
-                result2.setText(Algo.end +" bukan kata yang valid");
+                nodeSize.setText(Algo.end +" bukan kata yang valid");
             } else {
                 try {
+                    // pemanggilan fungsi algoritma
                     if(selectedChoice.equals("Uniform Cost Search (UCS)")){
                         Algo.UCS();
                     } else if(selectedChoice.equals("Greedy Best-First Search")){
@@ -108,33 +110,27 @@ public class GUI extends Frame implements ActionListener {
                     } else {
                         Algo.AS();
                     }
-                    
-                    result1.setPreferredSize(new Dimension(2000,20));
-                    result2.setPreferredSize(new Dimension(2000,20));
-                    result3.setPreferredSize(new Dimension(2000,20));
 
-                    result1.setText("Panjang path : " + Algo.path.size() + " langkah");
-                    result2.setText("Node yang dikunjungi : " + Algo.dikunjungi);
-                    result3.setText("Waktu : " + (Algo.endTime - Algo.startTime) + " ms");
+                    // Output ke layar
+                    pathSize.setText("Panjang path : " + Algo.path.size() + " langkah");
+                    nodeSize.setText("Node yang dikunjungi : " + Algo.dikunjungi);
+                    time.setText("Waktu : " + (Algo.endTime - Algo.startTime) + " ms");
 
-                    result1.setPreferredSize(new Dimension(2000,20));
-                    result2.setPreferredSize(new Dimension(2000,20));
-                    result3.setPreferredSize(new Dimension(2000,20));
-
-                    resultList.setText(Algo.start + "\n");  // Clear previous results
+                    path.setText(Algo.start + "\n");  // Clear previous results
                     for (String item : Algo.path) {
-                        resultList.append(item + "\n");
+                        path.append(item + "\n");
                     }
                 } catch (IndexOutOfBoundsException err) {
-                    result2.setText("Tidak ditemukan path dari " + Algo.start + " menuju " + Algo.end + ".");
+                    // Jika path tidak ada
+                    nodeSize.setText("Tidak ditemukan path dari " + Algo.start + " menuju " + Algo.end + ".");
                 }
             }
         }
     }
 
-    public static void Algo(String[] args) {
+    public static void main(String[] args) {
         // Deklarasi set untuk menyimpan kata inggris yang valid
-        Algo.readDictionary("../src/dict.txt");
+        Algo.readDictionary("src/dict.txt");
         new GUI();
     }
 }
