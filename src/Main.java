@@ -2,12 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static Set<String> dictionary, visited;
+    public static Set<String> dictionary, visited = new HashSet<>();
     public static String start, end;
-    public static long startTime, endTime, dikunjungi = 0;
+    public static long startTime, endTime, dikunjungi;
     public static int len;
     public static ArrayList<String> path;
-    public static ArrayList<Node> queue = new ArrayList<>();;
+    public static ArrayList<Node> queue = new ArrayList<>();
     
 
     // Membaca file txt yang berisi kata inggris yang valid
@@ -24,6 +24,12 @@ public class Main {
     }
 
     public static void UCS(){
+        // Membersihkan visited, queue dan dikunjungi untuk GUI
+        visited.clear();
+        queue.clear();
+        dikunjungi = 0;
+        len = start.length();
+        len = start.length();
         // Memulai perhitungan waktu
         startTime = System.currentTimeMillis();
 
@@ -105,6 +111,11 @@ public class Main {
     }
 
     public static void GBFS(){
+        // Membersihkan visited, queue dan dikunjungi untuk GUI
+        visited.clear();
+        queue.clear();
+        dikunjungi = 0;
+        len = start.length();
         // Memulai perhitungan waktu
         startTime = System.currentTimeMillis();
 
@@ -168,6 +179,11 @@ public class Main {
     }
 
     public static void AS(){
+        // Membersihkan visited, queue dan dikunjungi untuk GUI
+        visited.clear();
+        queue.clear();
+        dikunjungi = 0;
+        len = start.length();
         // Memulai perhitungan waktu
         startTime = System.currentTimeMillis();
 
@@ -218,11 +234,6 @@ public class Main {
     }
     
     public static void main(String[] args) {
-        // Deklarasi set untuk menyimpan kata inggris yang valid
-        readDictionary("../src/dict.txt");
-
-        // Deklarasi set untuk menyimpan kata yang sudah dicek
-        visited = new HashSet<String>();
 
         // Deklarasi Scanner untuk input
         Scanner sc = new Scanner(System.in);
