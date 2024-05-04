@@ -16,7 +16,7 @@ public class Algo {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                dictionary.add(line.trim());
+                dictionary.add(line.trim().toLowerCase());
             }
         } catch (IOException e) {
             System.err.println("Error reading from file: " + e.getMessage());
